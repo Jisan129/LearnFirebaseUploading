@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "1073096711023",
+    "firebase_url": "https://learn-firebase-notification.firebaseio.com",
+    "project_id": "learn-firebase-notification",
+    "storage_bucket": "learn-firebase-notification.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1073096711023:android:31bc849e05da00067a669a",
+        "android_client_info": {
+          "package_name": "com.example.learnfirebase"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1073096711023-r0lq46cpft55h4ag4d2u5e31kcaieb9k.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCrMLhEbVEBNEXdTd5Xlj0BFqUePbIB81M"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1073096711023-r0lq46cpft55h4ag4d2u5e31kcaieb9k.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
