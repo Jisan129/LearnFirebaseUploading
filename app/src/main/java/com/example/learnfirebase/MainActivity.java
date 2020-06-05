@@ -69,6 +69,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 UploadFile();
+
             }
         });
 
@@ -111,44 +112,39 @@ public class MainActivity extends AppCompatActivity {
 
     private void UploadFile() {
 
-        if(imageUri!=null)
-        {
-
-                storageReference.putFile(imageUri).continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>()
-                {
-                    @Override
-                    public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception
-                    {
-                        if (!task.isSuccessful())
-                        {
-                            throw task.getException();
-                        }
-                        return storageReference.getDownloadUrl();
-                    }
-                }).addOnCompleteListener(new OnCompleteListener<Uri>()
-                {
-                    @Override
-                    public void onComplete(@NonNull Task<Uri> task)
-                    {
-                        if (task.isSuccessful())
-                        {
-                            Uri downloadUri = task.getResult();
-                            Log.e(TAG, "then: " + downloadUri.toString());
-
-                            Toast.makeText(getApplicationContext(),"Success",Toast.LENGTH_SHORT).show();
+         if(imageUri!=null){
+             StorageReference fileReference =storageReference.child(System.currentTimeMillis()+"."+getFileExtension(imageUri));
+             fileReference.putFile(imageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                 @Override
+                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                     Handler handler=new Handler();
+                     handler.postDelayed(new Runnable() {
+                         @Override
+                         public void run() {
+                             progressBar.setProgress(0);
+                         }
+                     },5000);
+                     Upload upload=new Upload(editFileName.getText().toString().trim(),
+                             taskSnapshot.getUploadSessionUri().toString());
+                      String uploadId=databaseReference.push().getKey();
+                      databaseReference.child(uploadId).setValue(upload);
+                 }
 
 
-                            Upload upload = new Upload(editFileName.getText().toString().trim(),
-                                    downloadUri.toString());
+             }).addOnFailureListener(new OnFailureListener() {
+                 @Override
+                 public void onFailure(@NonNull Exception e) {
+                     Toast.makeText(getApplicationContext(),"Failure ",Toast.LENGTH_SHORT).show();
 
-                            databaseReference.push().setValue(upload);
-                        } else
-                        {
-                            Toast.makeText(MainActivity.this, "upload failed: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                });
-            }
+                 }
+             }).addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+                 @Override
+                 public void onProgress(@NonNull UploadTask.TaskSnapshot taskSnapshot) {
+                     double progress =(100.00*taskSnapshot.getBytesTransferred()/taskSnapshot.getTotalByteCount());
+                     progressBar.setProgress((int)progress);
+                 }
+             });
+         }
 
 
         else
